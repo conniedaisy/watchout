@@ -3,3 +3,57 @@
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 
+/*
+enemy class
+position: absolute;
+span element, use content property to show enemies
+
+player id
+draggable - w/ event listening
+
+*/
+
+body {
+  background: black;
+}
+
+.board {
+  position: relative;
+  padding: 40px;
+  margin: auto;
+  margin-top: 50px;
+  width: 700px;
+  height: 600px;
+  background: white;
+
+}
+
+.scoreboard {
+  background: lightgrey;
+  /*height: 150px;*/
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  /*left: 10px;*/
+  /*float: right;*/
+}
+
+.title {
+  border-collapse: collapse;
+  height: 150px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+h1 {
+  background: lightgrey;
+}
+
+svg {
+  width: 700px;
+  height: 450px;
+  background: lightblue;
+  position: absolute;
+  top: 150px;
+}
