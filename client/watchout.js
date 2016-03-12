@@ -119,63 +119,62 @@ d3.select('svg').selectAll('image')
 
 setInterval(generateEnemies, 1500);
 
-// var Player = function() {
+//IMPLEMENT DRAG
+// var dragMove = function(d) {
+//   // d3.select('svg').selectAll('circle')
+//   d3.select('circle')
+//   .attr('cx', function(d) {
+//     return d.cx = Math.max(0, d3.event.x);
+//   })
+//   .attr('cy', function(d) {
+//     return d.cy = Math.max(0, d3.event.y);
+//   });
+// };
 
-var dragMove = function(d) {
-  // d3.select('svg').selectAll('circle')
-  d3.select(this)
-  .attr('cx', function(d) {
-    return d.cx = d3.event.x;
-  })
-  .attr('cy', function(d) {
-    return d.cy = d3.event.y;
-  });
-};
+// var drag = d3.behavior.drag()
+// .origin(function(d) {
+//   return d;
+// })
+// .on('drag', dragMove);
+
+
+// d3.select('g').selectAll('circle')
+// .data([{'cx': 350, 'cy': 225, 'r': 15}])
+// .enter()
+// .append('circle')
+// .attr('cx', function(d) {
+//   return d.cx;
+// })
+// .attr('cy', function(d) {
+//   return d.cy;
+// })
+// .attr('r', function(d) {
+//   return d['r'];
+// })
+// .classed({'player': true})
+// .call(drag);
+
 
 var drag = d3.behavior.drag()
-.origin(function(d) {
-  return d;
-})
-.on('drag', dragMove);
+    .origin(function(d) { return d; })
+    .on("drag", dragmove);
 
-// var svg = d3.selectAll('svg').select('div')
+var svg = d3.select("svg")
+    .data([{x: gameSetup.width / 2, y: gameSetup.height / 2}])
+    // .attr("width", gameSetup.width)
+    // .attr("height", gameSetup.height);
 
-d3.select('g').selectAll('circle')
-.data([{'cx': 350, 'cy': 225, 'r': 15}])
-.enter()
-.append('circle')
-.attr('cx', function(d) {
-  return d.cx;
-})
-.attr('cy', function(d) {
-  return d.cy;
-})
-.attr('r', function(d) {
-  return d['r'];
-})
-.classed({'player': true})
-.call(drag);
+svg.append("circle")
+    .attr("r", 15)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    // .classed({'player': true})
+    .call(drag);
 
-  // this.selection = d3.select('.player');  // creates player selection for use with D3
-  
-// };
-
-// var player = new Player();
-
-
-
-
-// IMPLEMENT DRAG
-// var drag = d3.behavior.drag();
-// d3.select('svg').selectAll('.player').cal l(drag);
-
-// d3.select('svg').selectAll('.player').call(drag);
-
-// var drag = force.drag()
-// .on("dragstart", dragstart);
-
-// var dragstart = function(d) {
-//   d3.select(this).classed("fixed", d.fixed = true);
-// };
+function dragmove(d) {
+  d3.select(this)
+      .attr("cx", d.x = d3.event.x)
+      .attr("cy", d.y = d3.event.y);
+}
 
 
