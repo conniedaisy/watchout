@@ -56,17 +56,6 @@ var increaseScore = setInterval(function() {
   // console.log("running score");
 }, 100);
 
-// remeber to clearInterval when game over (at intersection)
-
-
-
-
-// var updateDOMScore = function() {
-//   // make a d3 selection of scoreboard class
-//   return d3.select('.scoreboard').selectAll('.highscore)').text(scoreBoard.current.toString());
-//   // update 
-// };
-
 var updateHighScore = function() {
   //when collision happens/at end of game
   if (scoreBoard.current > scoreBoard.highscore) {
@@ -147,6 +136,7 @@ svg.append('circle')
   .attr('cy', function(d) { return d.y; })
   // .classed({'player': true})
   .call(drag);
+//create circle, implement drag
 
 
 var allEnemiesSelection = d3.select('svg').selectAll('image');
@@ -154,7 +144,8 @@ var playerSelection = d3.select('svg').selectAll('circle');
 
 var checkCollision = function(collisionCallback) {
   allEnemiesSelection.each(function(item) {
-    var radiusSum = 15 + parseFloat(playerSelection.attr('r'));
+    // var radiusSum = 15 + parseFloat(playerSelection.attr('r'));
+    var radiusSum = 30;
     // console.log(playerSelection.attr('cx'));
     var xDiff = parseFloat(item.x) - parseFloat(playerSelection.attr('cx'));
     var yDiff = parseFloat(item.y) - parseFloat(playerSelection.attr('cy'));
@@ -168,31 +159,27 @@ var checkCollision = function(collisionCallback) {
 
 setInterval(function() {
   checkCollision(onCollision);
-}, 100);
+}, 50);
 
 var onCollision = function() {
 
+  scoreBoard.collisions++;
   updateHighScore();
   
   scoreBoard.current = 0;
-  scoreBoard.collisions++;
   d3.select('.collisions').selectAll('span')
     .text(scoreBoard.collisions.toString());
 
   //change background to red and back
-  d3.select('svg')
-    .style('background', 'red')
-      .transition()
-      // .duration(250)
-    .style('background', 'lightblue')
-      .transition();
-      // .duration(250);
+  // d3.select('svg')
+  //   .style('background', 'red')
+  //     .transition()
+  //     // .duration(250)
+  //   .style('background', 'lightblue');
+  //     // .transition();
+  //     // .duration(250);
 
 };
 
-//callback
-//reset score
-//check if highscore needs resetg
-//change background
 
 
