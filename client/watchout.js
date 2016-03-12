@@ -28,16 +28,54 @@
   // set those as properties of the newly created object
   // push to storage array
 
+var gameSetup = {
+  width: 700,
+  height: 450,
+  numPlayers: 30,
+};
 
-var SVGwidth = 700;
-var SVGheight = 450;
+var axes = {
+  x: d3.scale.linear().domain([0, 100]).range([0, gameSetup.width]),
+  y: d3.scale.linear().domain([0, 100]).range([0, gameSetup.height])
+};
 
-var generatePositions = function(num) {// num is number of enemies to generate
+var scoreBoard = {
+  highscore: 0,
+  current: 0,
+  collisions: 0,
+};
+
+
+
+var trackScore = function() {
+  scoreBoard.current += 1;
+};
+
+var increaseScore = setInterval(trackScore, 10);
+// remeber to clearInterval when game over (at intersection)
+
+var updateDOMScore = function() {
+  // make a d3 selection of scoreboard class
+
+  return d3.select('.scoreboard').selectAll('.highscore)').text(scoreBoard.current.toString());
+  // update 
+};
+
+var updateHighScore = function() {
+  //when collision happens/at end of game
+  if (scoreBoard.current > scoreBoard.highscore) {
+    scoreBoard.highscore = scoreBoard.current;
+    return d3.select('.scoreboard').selectAll('.highscore').text(scoreBoard.highscore.toString());
+  }
+};
+
+// below generates positions for enemies on the board
+var generatePositions = function(num) {
   var enemyPositions = [];
   for (var i = 0; i < num; i++) {
     var enemyPosition = {};
-    var x = Math.random() * SVGwidth;
-    var y = Math.random() * SVGheight;
+    var x = Math.random() * gameSetup.width;
+    var y = Math.random() * gameSetup.height;
     enemyPosition['x'] = x;
     enemyPosition['y'] = y;
     enemyPositions.push(enemyPosition);
@@ -45,9 +83,9 @@ var generatePositions = function(num) {// num is number of enemies to generate
   return enemyPositions;
 };
 
-//UPDATING ENEMY POSITIONS
+//UPDATING ENEMY POSITIONS -- used in the setInterval below
 var generateEnemies = function() { 
-  var enemyPositions = generatePositions(30);
+  var enemyPositions = generatePositions(gameSetup.numPlayers);
 
   d3.select('svg').selectAll('image')
   .data(enemyPositions)
@@ -63,8 +101,9 @@ var generateEnemies = function() {
 };
 
 //ENTERING NEW ENEMIES
-var initialEnemyPositions = generatePositions(30);
+var initialEnemyPositions = generatePositions(gameSetup.numPlayers);
 
+// Initial placement of new enemies into game
 d3.select('svg').selectAll('image')
 .data(initialEnemyPositions)
 .enter()
@@ -78,9 +117,20 @@ d3.select('svg').selectAll('image')
 })
 .attr('xlink:href', 'asteroid.png');
 
-
-
 setInterval(generateEnemies, 1500);
+
+//IMPLEMENT DRAG
+// var drag = d3.behavior.drag();
+// d3.select('svg').selectAll('.player').cal l(drag);
+
+// d3.select('svg').selectAll('.player').call(drag);
+
+// var drag = force.drag()
+// .on("dragstart", dragstart);
+
+// var dragstart = function(d) {
+//   d3.select(this).classed("fixed", d.fixed = true);
+// };
 
 
 //.text to update scores
