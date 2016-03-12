@@ -120,41 +120,6 @@ d3.select('svg').selectAll('image')
 setInterval(generateEnemies, 1500);
 
 //IMPLEMENT DRAG
-// var dragMove = function(d) {
-//   // d3.select('svg').selectAll('circle')
-//   d3.select('circle')
-//   .attr('cx', function(d) {
-//     return d.cx = Math.max(0, d3.event.x);
-//   })
-//   .attr('cy', function(d) {
-//     return d.cy = Math.max(0, d3.event.y);
-//   });
-// };
-
-// var drag = d3.behavior.drag()
-// .origin(function(d) {
-//   return d;
-// })
-// .on('drag', dragMove);
-
-
-// d3.select('g').selectAll('circle')
-// .data([{'cx': 350, 'cy': 225, 'r': 15}])
-// .enter()
-// .append('circle')
-// .attr('cx', function(d) {
-//   return d.cx;
-// })
-// .attr('cy', function(d) {
-//   return d.cy;
-// })
-// .attr('r', function(d) {
-//   return d['r'];
-// })
-// .classed({'player': true})
-// .call(drag);
-
-
 var drag = d3.behavior.drag()
     .origin(function(d) { return d; })
     .on("drag", dragmove);
@@ -176,5 +141,27 @@ function dragmove(d) {
       .attr("cx", d.x = d3.event.x)
       .attr("cy", d.y = d3.event.y);
 }
+
+var allEnemiesSelection = d3.select('svg').selectAll('image');
+var playerSelection = d3.select('svg').selectAll('circle');
+
+var checkCollision = function(callback) {
+  allEnemiesSelection.each(function(item) {
+    var radiusSum = 15 + parseFloat(playerSelection.attr('r'));
+    // console.log(playerSelection.attr('cx'));
+    var xDiff = parseFloat(item.x) - parseFloat(playerSelection.attr('cx'));
+    var yDiff = parseFloat(item.y) - parseFloat(playerSelection.attr('cy'));
+    var separation = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+    if (separation < radiusSum) {
+      // callback;
+      console.log(true);
+    }
+  });
+};
+
+setInterval(function() {
+  checkCollision();
+}, 100);
+
 
 
