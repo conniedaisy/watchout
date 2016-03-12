@@ -42,8 +42,45 @@ var generatePositions = function(num) {// num is number of enemies to generate
     enemyPosition['y'] = y;
     enemyPositions.push(enemyPosition);
   }
+  return enemyPositions;
 };
 
-d3.select("svg")
-.data([])
-.enter().append(<span class: enemy>).style(top, function(d){}).style(left, function(d){})
+//UPDATING ENEMY POSITIONS
+var generateEnemies = function() { 
+  var enemyPositions = generatePositions(30);
+
+  d3.select('svg').selectAll('image')
+  .data(enemyPositions)
+  .transition()
+  .duration(1500)
+  .style('x', function(d) {
+    return d['x'] + 'px';
+  })
+  .style('y', function(d) {
+    return d['y'] + 'px';
+  });
+
+};
+
+//ENTERING NEW ENEMIES
+var initialEnemyPositions = generatePositions(30);
+
+d3.select('svg').selectAll('image')
+.data(initialEnemyPositions)
+.enter()
+.append('image') //add class
+.classed({'enemy': true})
+.style('x', function(d) {
+  return d['x'] + 'px';
+})
+.style('y', function(d) {
+  return d['y'] + 'px';
+})
+.attr('xlink:href', 'asteroid.png');
+
+
+
+setInterval(generateEnemies, 1500);
+
+
+//.text to update scores

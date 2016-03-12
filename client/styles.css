@@ -59,19 +59,23 @@ svg {
 }
 
 .enemy {
- content: url(asteroid.png); 
+/* xlink:href: asteroid.png; */
  height: 15px;
- width: auto;
+ width: 15px;
 }
 
 .player {
-  height: 5px;
+/*  height: 5px;
   width: 5px;
-  border-style: solid;
+*/
+  /*position: absolute;*/
+  fill: red;
+  cx: 350;
+  cy: 225;
+  r: 10;
+/*  border-style: solid;
   border-radius: 10px;
   border-color: red;
-  position: absolute;
-  top: 225px;
-  left: 350px;
-  z-index: 5;
+/*  position: absolute;*/
+  /*z-index: 5;*/
 }
