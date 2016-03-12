@@ -34,10 +34,10 @@ var gameSetup = {
   numPlayers: 30,
 };
 
-var axes = {
-  x: d3.scale.linear().domain([0, 100]).range([0, gameSetup.width]),
-  y: d3.scale.linear().domain([0, 100]).range([0, gameSetup.height])
-};
+// var axes = {
+//   x: d3.scale.linear().domain([0, 100]).range([0, gameSetup.width]),
+//   y: d3.scale.linear().domain([0, 100]).range([0, gameSetup.height])
+// };
 
 var scoreBoard = {
   highscore: 0,
@@ -45,27 +45,35 @@ var scoreBoard = {
   collisions: 0,
 };
 
-
-
 var trackScore = function() {
   scoreBoard.current += 1;
+  d3.select('.current').selectAll('span')
+    .text(scoreBoard.current.toString());
 };
 
-var increaseScore = setInterval(trackScore, 10);
+var increaseScore = setInterval(function() {
+  trackScore();
+  // console.log("running score");
+}, 100);
+
 // remeber to clearInterval when game over (at intersection)
 
-var updateDOMScore = function() {
-  // make a d3 selection of scoreboard class
 
-  return d3.select('.scoreboard').selectAll('.highscore)').text(scoreBoard.current.toString());
-  // update 
-};
+
+
+// var updateDOMScore = function() {
+//   // make a d3 selection of scoreboard class
+//   return d3.select('.scoreboard').selectAll('.highscore)').text(scoreBoard.current.toString());
+//   // update 
+// };
 
 var updateHighScore = function() {
   //when collision happens/at end of game
   if (scoreBoard.current > scoreBoard.highscore) {
+    console.log('hi');
     scoreBoard.highscore = scoreBoard.current;
-    return d3.select('.scoreboard').selectAll('.highscore').text(scoreBoard.highscore.toString());
+    d3.select('.highscore').selectAll('span')
+      .text(scoreBoard.highscore.toString());
   }
 };
 
@@ -120,32 +128,31 @@ d3.select('svg').selectAll('image')
 setInterval(generateEnemies, 1500);
 
 //IMPLEMENT DRAG
-var drag = d3.behavior.drag()
-    .origin(function(d) { return d; })
-    .on("drag", dragmove);
-
-var svg = d3.select("svg")
-    .data([{x: gameSetup.width / 2, y: gameSetup.height / 2}])
-    // .attr("width", gameSetup.width)
-    // .attr("height", gameSetup.height);
-
-svg.append("circle")
-    .attr("r", 15)
-    .attr("cx", function(d) { return d.x; })
-    .attr("cy", function(d) { return d.y; })
-    // .classed({'player': true})
-    .call(drag);
-
-function dragmove(d) {
+var dragmove = function(d) {
   d3.select(this)
-      .attr("cx", d.x = d3.event.x)
-      .attr("cy", d.y = d3.event.y);
-}
+    .attr('cx', d.x = d3.event.x)
+    .attr('cy', d.y = d3.event.y);
+};
+
+var drag = d3.behavior.drag()
+  .origin(function(d) { return d; })
+  .on('drag', dragmove);
+
+var svg = d3.select('svg')
+.data([{x: gameSetup.width / 2, y: gameSetup.height / 2}]);
+
+svg.append('circle')
+  .attr('r', 15)
+  .attr('cx', function(d) { return d.x; })
+  .attr('cy', function(d) { return d.y; })
+  // .classed({'player': true})
+  .call(drag);
+
 
 var allEnemiesSelection = d3.select('svg').selectAll('image');
 var playerSelection = d3.select('svg').selectAll('circle');
 
-var checkCollision = function(callback) {
+var checkCollision = function(collisionCallback) {
   allEnemiesSelection.each(function(item) {
     var radiusSum = 15 + parseFloat(playerSelection.attr('r'));
     // console.log(playerSelection.attr('cx'));
@@ -153,15 +160,39 @@ var checkCollision = function(callback) {
     var yDiff = parseFloat(item.y) - parseFloat(playerSelection.attr('cy'));
     var separation = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
     if (separation < radiusSum) {
-      // callback;
-      console.log(true);
+      collisionCallback();
+      // console.log(true);
     }
   });
 };
 
 setInterval(function() {
-  checkCollision();
+  checkCollision(onCollision);
 }, 100);
 
+var onCollision = function() {
+
+  updateHighScore();
+  
+  scoreBoard.current = 0;
+  scoreBoard.collisions++;
+  d3.select('.collisions').selectAll('span')
+    .text(scoreBoard.collisions.toString());
+
+  //change background to red and back
+  d3.select('svg')
+    .style('background', 'red')
+      .transition()
+      // .duration(250)
+    .style('background', 'lightblue')
+      .transition();
+      // .duration(250);
+
+};
+
+//callback
+//reset score
+//check if highscore needs resetg
+//change background
 
 
