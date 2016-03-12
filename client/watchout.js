@@ -119,30 +119,48 @@ d3.select('svg').selectAll('image')
 
 setInterval(generateEnemies, 1500);
 
-var Player = function() {
-  this.x = x;
-  this.y = y;
-  this.r = r;
-  this.player = d3.select('svg').selectAll('.player');  // creates player selection for use with D3
+// var Player = function() {
+
+var dragMove = function(d) {
+  // d3.select('svg').selectAll('circle')
+  d3.select(this)
+  .attr('cx', function(d) {
+    return d.cx = d3.event.x;
+  })
+  .attr('cy', function(d) {
+    return d.cy = d3.event.y;
+  });
 };
 
-Player.prototype.movePlayer = function(dx, dy) {
-  // take current position
-  // add the drag event's position
-  // set new position on the player selection to manifest on the DOM
-};
+var drag = d3.behavior.drag()
+.origin(function(d) {
+  return d;
+})
+.on('drag', dragMove);
 
-Player.prototype.setupDrag = function() {
-  var drag, dragMove;
-  var context = this;
-  var dragMove = function() {
-    return context.movePlayer(d3.event.dx, d3.event.dy);  // need to implement moveRelative 
-  };    // the d3 event object appears to have a dx and dy property giving current pos of player
-  drag = d3.behavior.drag().on('drag', dragMove);  //^^ may be able to use for intersection ^^
-  return context.player.call(drag);
+// var svg = d3.selectAll('svg').select('div')
 
+d3.select('g').selectAll('circle')
+.data([{'cx': 350, 'cy': 225, 'r': 15}])
+.enter()
+.append('circle')
+.attr('cx', function(d) {
+  return d.cx;
+})
+.attr('cy', function(d) {
+  return d.cy;
+})
+.attr('r', function(d) {
+  return d['r'];
+})
+.classed({'player': true})
+.call(drag);
+
+  // this.selection = d3.select('.player');  // creates player selection for use with D3
   
-};
+// };
+
+// var player = new Player();
 
 
 
