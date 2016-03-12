@@ -119,7 +119,35 @@ d3.select('svg').selectAll('image')
 
 setInterval(generateEnemies, 1500);
 
-//IMPLEMENT DRAG
+var Player = function() {
+  this.x = x;
+  this.y = y;
+  this.r = r;
+  this.player = d3.select('svg').selectAll('.player');  // creates player selection for use with D3
+};
+
+Player.prototype.movePlayer = function(dx, dy) {
+  // take current position
+  // add the drag event's position
+  // set new position on the player selection to manifest on the DOM
+};
+
+Player.prototype.setupDrag = function() {
+  var drag, dragMove;
+  var context = this;
+  var dragMove = function() {
+    return context.movePlayer(d3.event.dx, d3.event.dy);  // need to implement moveRelative 
+  };    // the d3 event object appears to have a dx and dy property giving current pos of player
+  drag = d3.behavior.drag().on('drag', dragMove);  //^^ may be able to use for intersection ^^
+  return context.player.call(drag);
+
+  
+};
+
+
+
+
+// IMPLEMENT DRAG
 // var drag = d3.behavior.drag();
 // d3.select('svg').selectAll('.player').cal l(drag);
 
@@ -133,4 +161,3 @@ setInterval(generateEnemies, 1500);
 // };
 
 
-//.text to update scores
