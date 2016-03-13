@@ -129,7 +129,6 @@ var checkCollision = function(collisionCallback) {
   });
 };
 
-
 var onCollision = function() {
   console.log("inside onCollision");
   scoreBoard.collisions++;
@@ -162,3 +161,4 @@ var initGame = function() {
 
 d3.select('button').
   on('click', initGame);
+
